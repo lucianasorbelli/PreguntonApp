@@ -1,0 +1,37 @@
+<%= form_for(@question) do |f| %> 
+	<img id='gravatar' src='https://www.gravatar.com/avatar/unknown'>
+	<%= f.text_field(:email, placeholder: 'email') %>
+	<%= f.text_area(:title, placeholder: 'que quieres saber?', rows: 3) %>
+	<%= f.submit('Pregunta!') %>
+<% end %>
+
+<div id= 'questions'>
+<% @questions.each do |question| %>
+	<div class='question'>
+		<img src= '<%= gravatar_url(question.email)%>'/>
+		<div class="details">
+			<p><b> Pregunta de: </b>
+				<a href="mailto:<%= question.email%>"> <%=question.email%></a> 
+			</p>
+			<p><%= question.title %></p>
+			<a href = '#' >
+				ver respuestas
+			</a>
+		</div>
+		<div class='answers'>
+			<%= form_for(Answer.new, url: question_answers_path(question), method: "post") do |f| %> 
+				<%= f.text_field(:email, placeholder: 'email') %>
+				<%= f.text_area(:content, placeholder: 'Dime tu ', rows: 3) %>
+				<%= f.submit('Responde!') %>
+			<% end %>
+			<% question.answers.each do |answer| %>
+				<p><b> Respuesta de: </b>
+					<a href="mailto:<%= answer.email%>"> <%=answer.email%></a> 
+				</p>
+				<p><%= answer.content %></p>
+			<% end %>
+		</div>
+	</div>
+	<br>
+<% end %>
+</div>
